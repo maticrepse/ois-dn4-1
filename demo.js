@@ -12,13 +12,28 @@ function getSessionId() {
                 "&password=" + encodeURIComponent(password),
         async: false
     });
+    
     return response.responseJSON.sessionId;
 }
 
-
-function kreirajEHRzaBolnika() {
+setInterval(function enableButton(){
 	sessionId = getSessionId();
 
+	var ime = $("#kreirajIme").val();
+	var priimek = $("#kreirajPriimek").val();
+	var datumRojstva = $("#kreirajDatumRojstva").val();
+
+	if (!ime || !priimek || !datumRojstva || ime.trim().length == 0 || priimek.trim().length == 0 || datumRojstva.trim().length == 0) {
+		$("#kreirajKurac").addClass("disabled");
+	}else{
+		$("#kreirajKurac").removeClass("disabled");
+	}
+}, 1);
+
+
+function kreirajEHRzaBolnika() {
+	
+	sessionId = getSessionId();
 	var ime = $("#kreirajIme").val();
 	var priimek = $("#kreirajPriimek").val();
 	var datumRojstva = $("#kreirajDatumRojstva").val();
@@ -65,7 +80,7 @@ function kreirajEHRzaBolnika() {
 
 function preberiEHRodBolnika() {
 	sessionId = getSessionId();
-
+	//$("#kreirajKurac").addClass("disabled");
 	var ehrId = $("#preberiEHRid").val();
 
 	if (!ehrId || ehrId.trim().length == 0) {
@@ -251,6 +266,7 @@ function preberiMeritveVitalnihZnakov() {
 
 
 $(document).ready(function() {
+	//setInterval(enableButton(), 5000);
 	$('#preberiObstojeciEHR').change(function() {
 		$("#preberiSporocilo").html("");
 		$("#preberiEHRid").val($(this).val());
@@ -280,4 +296,5 @@ $(document).ready(function() {
 		$("#rezultatMeritveVitalnihZnakov").html("");
 		$("#meritveVitalnihZnakovEHRid").val($(this).val());
 	});
+	
 });
